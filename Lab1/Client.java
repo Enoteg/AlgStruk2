@@ -6,62 +6,34 @@ import java.util.Random;
 public class Client {
     public static void main(String[] args) {
         Random random = new Random();
-        long end;
-        long begin;
-
         int size = 20000;
-        Interface bubbleArray = new BubbleSortArray(size);
-        Interface insertArray = new InsertionSortArray(size);
-        Interface selectArray = new SelectionSortArray(size);
-        Interface shellArray = new ShellSortArray(size);
+
+        BubbleSortArray bubbleArray = new BubbleSortArray(size);
+        InsertionSortArray insertArray = new InsertionSortArray(size);
+        SelectionSortArray selectArray = new SelectionSortArray(size);
+        ShellSortArray shellArray = new ShellSortArray(size);
 
         for (int i = 0; i < size; i++) {
-            bubbleArray.insert(random.nextLong(100000));
-            insertArray.insert(random.nextLong(100000));
-            selectArray.insert(random.nextLong(100000));
-            shellArray.insert(random.nextLong(100000))
+            long value = random.nextLong(100000);
+            bubbleArray.insert(value);
+            insertArray.insert(value);
+            selectArray.insert(value);
+            shellArray.insert(value);
         }
 
-        System.out.println("Массив для BubbleSort: ");
-//            bubbleArray.display();
-        bubbleArray.bubbleSort();
-        System.out.println("Отсортированный массив сортировкой BubbleSort:");
-        bubbleArray.bubbleSort();
-        begin = System.currentTimeMillis();
-        bubbleArray.display();
-        end = System.currentTimeMillis();
-        System.out.printf("Время выполнения: %d мс \n", end - begin);
+        measureSortTime("BubbleSort", bubbleArray::bubbleSort);
 
-        System.out.println();
-        System.out.println("Массив для InsertionSort: ");
-//            insertArray.display();
-        insertArray.insertionSort();
-        System.out.println("Отсортированный массив сортировкой InsertionSort:");
-        insertArray.insertionSort();
-        begin = System.currentTimeMillis();
-        insertArray.display();
-        end = System.currentTimeMillis();
-        System.out.printf("Время выполнения: %d мс \n", end - begin);
+        measureSortTime("InsertionSort", insertArray::insertionSort);
 
-        System.out.println();
-        System.out.println("Массив для SelectionSort: ");
-//            selectArray.display();
-        selectArray.selectionSort();
-        System.out.println("Отсортированный массив сортировкой SelectionSort:");
-        selectArray.selectionSort();
-        begin = System.currentTimeMillis();
-        selectArray.display();
-        end = System.currentTimeMillis();
-        System.out.printf("Время выполнения: %d мс \n", end - begin);
+        measureSortTime("SelectionSort", selectArray::selectionSort);
 
-        System.out.println();
-        System.out.println("Массив для ShellSort: ");
-        shellArray.shellSort();
-        System.out.println("Отсортированный массив сортировкой ShellSort:");
-        shellArray.shellSort();
-        begin = System.currentTimeMillis();
-        shellArray.display();
-        end = System.currentTimeMillis();
-        System.out.printf("Время выполнения: %d мс \n", end - begin);
+        measureSortTime("ShellSort", shellArray::shellSort);
+    }
+
+    private static void measureSortTime(String sortName, Runnable sortFunction) {
+        long start = System.currentTimeMillis();
+        sortFunction.run();
+        long end = System.currentTimeMillis();
+        System.out.printf("%s: %d мс\n", sortName, end - start);
     }
 }
