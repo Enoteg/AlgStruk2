@@ -45,3 +45,4 @@ public class ShellSortArray extends ArrayImp {
             h = (h - 1) / 3; // интервальная последовательность пересчитывается
         }
     }
+}

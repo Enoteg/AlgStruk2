@@ -23,9 +23,12 @@ public class Client {
 
         measureSortTime("BubbleSort", bubbleArray::bubbleSort);
 
+
         measureSortTime("InsertionSort", insertArray::insertionSort);
 
+
         measureSortTime("SelectionSort", selectArray::selectionSort);
+
 
         measureSortTime("ShellSort", shellArray::shellSort);
     }
