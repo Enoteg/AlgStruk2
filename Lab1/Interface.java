@@ -9,14 +9,6 @@ public interface Interface {
 
     void display();
 
-    void bubbleSort();
-
-    void insertionSort();
-
-    void selectionSort();
-
-    void shellSort();
-
     int getSize();
 
     long getMin();

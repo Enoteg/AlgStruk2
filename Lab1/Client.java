@@ -1,42 +1,47 @@
 package Lab1;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Client {
     public static void main(String[] args) {
-        Random random = new Random();
-        int size = 20000;
-
-        BubbleSortArray bubbleArray = new BubbleSortArray(size);
-        InsertionSortArray insertArray = new InsertionSortArray(size);
-        SelectionSortArray selectArray = new SelectionSortArray(size);
-        ShellSortArray shellArray = new ShellSortArray(size);
-
-        for (int i = 0; i < size; i++) {
-            long value = random.nextLong(100000);
-            bubbleArray.insert(value);
-            insertArray.insert(value);
-            selectArray.insert(value);
-            shellArray.insert(value);
+        int[] sizes = {1000, 5000, 10000, 20000, 50000, 100000, 500000, 1000000, 2000000, 5000000, 10000000};
+        for (int size : sizes) {
+            System.out.println("Размер массива: " + size);
+            testSorters(size);
+            System.out.println("-----------------------");
         }
-
-        measureSortTime("BubbleSort", bubbleArray::bubbleSort);
-
-
-        measureSortTime("InsertionSort", insertArray::insertionSort);
-
-
-        measureSortTime("SelectionSort", selectArray::selectionSort);
-
-
-        measureSortTime("ShellSort", shellArray::shellSort);
     }
 
-    private static void measureSortTime(String sortName, Runnable sortFunction) {
+    private static void testSorters(int size) {
+        ShellSortArray shellKnuth = new ShellSortArray(size);
+        ShellSortArray shellSedgewick = new ShellSortArray(size);
+        ShellSortArray shellDef = new ShellSortArray(size);
+
+        fillArray(shellKnuth, size);
+        fillArray(shellSedgewick, size);
+        fillArray(shellDef, size);
+
+        measureSortTimeAndSwaps("Кнут", shellKnuth::shellSortKnuth);
+        measureSortTimeAndSwaps("Седжвик", shellSedgewick::shellSortSedgewick);
+        measureSortTimeAndSwaps("Обычный Шелл", shellDef::shellSort);
+    }
+
+    private static void fillArray(ShellSortArray array, int size) {
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            array.insert(random.nextInt(100000));
+        }
+    }
+
+    private static void measureSortTimeAndSwaps(String sequenceName, SwapCountRunnable sortFunction) {
         long start = System.currentTimeMillis();
-        sortFunction.run();
+        int swapCount = sortFunction.run();
         long end = System.currentTimeMillis();
-        System.out.printf("%s: %d мс\n", sortName, end - start);
+        System.out.printf("%s: %d мс, перестановок: %d\n", sequenceName, end - start, swapCount);
+    }
+
+    @FunctionalInterface
+    interface SwapCountRunnable {
+        int run();
     }
 }
