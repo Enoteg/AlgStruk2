@@ -1,60 +1,71 @@
 package Lab2;
 
 public class QuickSortArray {
-    protected final long[] array;
-    private int nElems;
+    private final long[] array;
     private int swapCount;
 
-    public QuickSortArray(int size) {
-        this.array = new long[size];
-        this.nElems = 0;
+    public QuickSortArray(long[] array) {
+        this.array = array;
         this.swapCount = 0;
     }
 
-    public void insert(long value) {
-        array[nElems] = value;
-        nElems++;
-    }
-
-    public void display() {
-        for (int i = 0; i < nElems; i++) {
-            System.out.print(array[i] + " ");
-        }
-        System.out.println();
-    }
-
     public void sort() {
-        quickSort(0, nElems - 1);
+        sort(0, array.length - 1);
     }
 
-    private void quickSort(int left, int right) {
-        if (right - left > 0) {
-            long pivot = array[right];
-            int partition = partition(left, right, pivot);
-            quickSort(left, partition - 1);
-            quickSort(partition + 1, right);
+    private void sort(int leftIndex, int rightIndex) {
+        int size = rightIndex - leftIndex + 1;
+        if (size <= 3) {
+            manualSort(leftIndex, rightIndex);
+        } else {
+            long pivot = medianOfThree(leftIndex, rightIndex);
+            int partition = partition(leftIndex, rightIndex, pivot);
+            sort(leftIndex, partition - 1);
+            sort(partition + 1, rightIndex);
+        }
+    }
+
+    private long medianOfThree(int leftIndex, int rightIndex) {
+        int center = (leftIndex + rightIndex) / 2;
+        if (array[leftIndex] > array[center])
+            swap(leftIndex, center);
+        if (array[leftIndex] > array[rightIndex])
+            swap(leftIndex, rightIndex);
+        if (array[center] > array[rightIndex])
+            swap(center, rightIndex);
+        swap(center, rightIndex - 1);
+        return array[rightIndex - 1];
+    }
+
+    private void manualSort(int leftIndex, int rightIndex) {
+        int size = rightIndex - leftIndex + 1;
+        if (size <= 1)
+            return;
+        if (size == 2) {
+            if (array[leftIndex] > array[rightIndex])
+                swap(leftIndex, rightIndex);
+        } else { // size == 3
+            if (array[leftIndex] > array[rightIndex - 1])
+                swap(leftIndex, rightIndex - 1);
+            if (array[leftIndex] > array[rightIndex])
+                swap(leftIndex, rightIndex);
+            if (array[rightIndex - 1] > array[rightIndex])
+                swap(rightIndex - 1, rightIndex);
         }
     }
 
     private int partition(int leftIndex, int rightIndex, long pivot) {
-        int leftPtr = leftIndex - 1;
-        int rightPtr = rightIndex;
+        int leftPtr = leftIndex;
+        int rightPtr = rightIndex - 1;
         while (true) {
-            do {
-                leftPtr += 1;
-            } while (array[leftPtr] < pivot);
-
-            do {
-                rightPtr -= 1;
-            } while (rightPtr > leftIndex && array[rightPtr] > pivot);
-
-            if (leftPtr >= rightPtr) {
+            while (array[++leftPtr] < pivot) { }
+            while (array[--rightPtr] > pivot) { }
+            if (leftPtr >= rightPtr)
                 break;
-            } else {
+            else
                 swap(leftPtr, rightPtr);
-            }
         }
-        swap(leftPtr, rightIndex);
+        swap(leftPtr, rightIndex - 1);
         return leftPtr;
     }
 
@@ -68,5 +79,4 @@ public class QuickSortArray {
     public int getSwapCount() {
         return swapCount;
     }
-
 }

@@ -13,25 +13,26 @@ public class Client {
     }
 
     private static void testSorters(int size) {
-        QuickSortArray quickSortAr = new QuickSortArray(size);
-        fillArray(quickSortAr, size);
-        measureSortTimeAndSwaps("QuickSort", quickSortAr);
-    }
-
-    private static void fillArray(QuickSortArray array, int size) {
+        long[] originalArray = new long[size];
         Random random = new Random();
         for (int i = 0; i < size; i++) {
-            array.insert(random.nextInt(100000));
+            originalArray[i] = random.nextInt(100000);
         }
-    }
 
-    private static void measureSortTimeAndSwaps(String algorithmName, QuickSortArray sorter) {
+        long[] arrayForRecursive = originalArray.clone();
+        QuickSortArray qsRecursive = new QuickSortArray(arrayForRecursive);
         long start = System.currentTimeMillis();
-        sorter.sort();
+        qsRecursive.sort();
         long end = System.currentTimeMillis();
-        System.out.printf("%s: %d мс, перестановок: %d\n",
-                algorithmName,
-                end - start,
-                sorter.getSwapCount());
+        System.out.printf("QuickSort (рекурсивный): %d мс, перестановок: %d%n",
+                (end - start), qsRecursive.getSwapCount());
+
+        long[] arrayForNonRecursive = originalArray.clone();
+        QuickSortArrayNoRecursion qsNonRecursive = new QuickSortArrayNoRecursion(arrayForNonRecursive);
+        start = System.currentTimeMillis();
+        qsNonRecursive.sort();
+        end = System.currentTimeMillis();
+        System.out.printf("QuickSort (нерекурсивный): %d мс, перестановок: %d%n",
+                (end - start), qsNonRecursive.getSwapCount());
     }
 }
