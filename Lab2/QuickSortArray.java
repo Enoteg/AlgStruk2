@@ -15,8 +15,8 @@ public class QuickSortArray {
 
     private void sort(int leftIndex, int rightIndex) {
         int size = rightIndex - leftIndex + 1;
-        if (size <= 3) {
-            manualSort(leftIndex, rightIndex);
+        if (size <= 10) {
+            insertionSort(leftIndex, rightIndex);
         } else {
             long pivot = medianOfThree(leftIndex, rightIndex);
             int partition = partition(leftIndex, rightIndex, pivot);
@@ -37,22 +37,34 @@ public class QuickSortArray {
         return array[rightIndex - 1];
     }
 
-    private void manualSort(int leftIndex, int rightIndex) {
-        int size = rightIndex - leftIndex + 1;
-        if (size <= 1)
-            return;
-        if (size == 2) {
-            if (array[leftIndex] > array[rightIndex])
-                swap(leftIndex, rightIndex);
-        } else { // size == 3
-            if (array[leftIndex] > array[rightIndex - 1])
-                swap(leftIndex, rightIndex - 1);
-            if (array[leftIndex] > array[rightIndex])
-                swap(leftIndex, rightIndex);
-            if (array[rightIndex - 1] > array[rightIndex])
-                swap(rightIndex - 1, rightIndex);
+    private void insertionSort(int leftIndex, int rightIndex) {
+        for (int i = leftIndex + 1; i <= rightIndex; i++) {
+            long key = array[i];
+            int j = i - 1;
+            while (j >= leftIndex && array[j] > key) {
+                array[j + 1] = array[j];
+                j--;
+            }
+            array[j + 1] = key;
         }
     }
+
+//    private void manualSort(int leftIndex, int rightIndex) {
+//        int size = rightIndex - leftIndex + 1;
+//        if (size <= 1)
+//            return;
+//        if (size == 2) {
+//            if (array[leftIndex] > array[rightIndex])
+//                swap(leftIndex, rightIndex);
+//        } else { // size == 3
+//            if (array[leftIndex] > array[rightIndex - 1])
+//                swap(leftIndex, rightIndex - 1);
+//            if (array[leftIndex] > array[rightIndex])
+//                swap(leftIndex, rightIndex);
+//            if (array[rightIndex - 1] > array[rightIndex])
+//                swap(rightIndex - 1, rightIndex);
+//        }
+//    }
 
     private int partition(int leftIndex, int rightIndex, long pivot) {
         int leftPtr = leftIndex;
