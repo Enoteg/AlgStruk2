@@ -19,7 +19,6 @@ public class Client {
             originalArray[i] = random.nextInt(100000);
         }
 
-        // QuickSort (рекурсивный)
         long[] arrayForRecursive = originalArray.clone();
         QuickSortArray qsRecursive = new QuickSortArray(arrayForRecursive);
         long start = System.currentTimeMillis();
